@@ -19,15 +19,9 @@ function menu {
 	sleep 5
 	echo select circuit
 	sendseq "down down enter enter enter"
-	#echo wait1 car
-	#sleep 3
-	#sendseq "left enter"
-	#echo wait2 car
-	#sleep 3
-	#echo select car
-	#sendseq "enter"
 	echo wait car
-	sendseq "right enter enter"
+	sleep 2
+	sendseq "enter enter"
 	echo wait gearbox
 	sleep 3
 	echo select gearbox
