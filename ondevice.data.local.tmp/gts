@@ -1,0 +1,2 @@
+#!/system/bin/sh
+su - root -c "/data/local/tmp/gts.root 1400 menu"
