@@ -1,0 +1,78 @@
+#!/system/bin/sh
+
+cmd="/data/local/tmp/hid-gadget-test /dev/hidg0 keyboard"
+RUN=1
+DELAY=0.8
+
+function sendseq {
+	for i in $1 ; do
+		echo "-->" $i
+		echo $i | $cmd
+		/sbin/sleep $DELAY
+	done
+}
+
+function menu {
+	echo from arcade, select custom race
+	sendseq "enter down down down enter"
+	echo wait circuit
+	/sbin/sleep 5
+	echo select circuit
+	sendseq "down down enter enter enter"
+	echo wait car
+	/sbin/sleep 2
+	sendseq "enter enter"
+	echo wait gearbox
+	/sbin/sleep 3
+	echo select gearbox
+	sendseq "left enter"
+	echo wait menu 
+	/sbin/sleep 2
+	echo select endurance
+	DELAY=0.2
+	sendseq "right up up up up up up enter down enter"
+	echo select 20 minutes
+	sendseq "down enter right right enter"
+	echo select 2 cars
+	sendseq "right enter left left left left left left left left left left left left left left left left left left enter"
+	echo select boost off
+	sendseq "down down enter up up enter"
+	echo select GR1
+	sendseq "left down down down down enter down down down down down down down down down down down down down down enter"
+        echo select difficulty
+	sendseq "right enter down enter"
+	echo launch
+	/sbin/sleep 2
+	sendseq "left left enter"
+	echo /sbin/sleep 30
+	DELAY=0.8
+	/sbin/sleep 30
+	echo GO
+	sendseq "enter"
+}
+
+
+#if arg2 is menu then launch the menu sequence
+if [ "$2" = "menu" ]; then
+	menu 
+fi
+
+#endless loop restarting the race
+while true; do
+	N=$1
+	#countdown in seconds
+	while [ $N -gt 0 ] ; do
+		echo run $RUN $N
+		N=`expr $N - 1`
+		/sbin/sleep 1
+	done
+	sendseq "enter"
+	echo wait for credit and XP
+	/sbin/sleep 11
+	echo exit the screen
+	sendseq "esc"
+	/sbin/sleep 2
+	echo start the race
+	sendseq "enter"
+	RUN=`expr $RUN + 1`
+done
